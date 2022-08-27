@@ -4,10 +4,7 @@ import com.stream_practice_project.model.*;
 import com.stream_practice_project.service.*;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Component
@@ -186,19 +183,56 @@ public class Practice {
 
     // Display all the employees whose salary is between 6000 and 7000
     public static List<Employee> getAllEmployeesSalaryBetween() {
-        //TODO Implement the method
-        return new ArrayList<>();
+
+        return getAllEmployees().stream()
+                .filter(employee -> employee.getSalary()>6000 & employee.getSalary()<7000)
+                .collect(Collectors.toList());
+
     }
 
     // Display the salary of the employee Grant Douglas (lastName: Grant, firstName: Douglas)
     public static Long getGrantDouglasSalary() throws Exception {
-        //TODO Implement the method
-        return 1L;
+
+        return getAllEmployees().stream()
+                .filter(employee -> employee.getFirstName().equals("Douglas"))
+                .filter(employee -> employee.getLastName().equals("Grant"))
+                .findFirst().orElseThrow(()-> new Exception("No Employee Found!")).getSalary();
+
     }
 
     // Display the maximum salary an employee gets
     public static Long getMaxSalary() throws Exception {
-        return 1L;
+
+        return getAllEmployees().stream()
+                .sorted(Comparator.comparing(Employee::getSalary).reversed()) //to get descending
+                .findFirst().get().getSalary();
+
+        /*
+
+        return getAllEmployees().stream()
+                .sorted(Comparator.comparing(Employee::getSalary).reversed()) //without reverse it will be ascending
+                .limit(1).collect(Collectors.toList()).get(0).getSalary();
+
+
+        return getAllEmployees().stream()
+                .max(Comparator.comparing(Employee::getSalary))
+                .get().getSalary();
+
+
+        return getAllEmployees().stream()
+                .map(Employee::getSalary)
+                .reduce((salary1,salary2)->salary1>salary2 ? salary1:salary2)//we used the one that is not excepting the initial value
+                .get();
+
+
+        return getAllEmployees().stream()
+                .map(Employee::getSalary)
+                .reduce(Long::max)//we used the one that is not excepting the initial value
+                .get();
+         */
+
+
+
     }
 
     // Display the employee(s) who gets the maximum salary
