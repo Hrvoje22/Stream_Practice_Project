@@ -4,6 +4,7 @@ import com.stream_practice_project.model.*;
 import com.stream_practice_project.service.*;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -379,38 +380,68 @@ public class Practice {
 
     // Display all the employees separated based on their department id number
     public static Map<Long, List<Employee>> getAllEmployeesForEachDepartment() {
-        //TODO Implement the method
-        return new HashMap<>();
+
+        return getAllEmployees().stream()
+                .collect(Collectors.groupingBy(employee -> employee.getDepartment().getId()));
+
+
     }
 
     // Display the total number of the departments
     public static Long getTotalDepartmentsNumber() {
-        //TODO Implement the method
-        return 1L;
+
+        return getAllDepartments().stream().count();
+
+        //return (long) getAllDepartments().size();
+
     }
 
     // Display the employee whose first name is 'Alyssa' and manager's first name is 'Eleni' and department name is 'Sales'
     public static Employee getEmployeeWhoseFirstNameIsAlyssaAndManagersFirstNameIsEleniAndDepartmentNameIsSales() throws Exception {
-        //TODO Implement the method
-        return new Employee();
+
+        return getAllEmployees().stream()
+                .filter(employee -> employee.getFirstName().equals("Alyssa"))
+                .filter(employee -> employee.getManager().getFirstName().equals("Eleni"))
+                .filter(employee -> employee.getDepartment().getDepartmentName().equals("Sales"))
+                .findFirst().get();
+
+        /*
+        return getAllEmployees().stream()
+                .filter(employee -> employee.getFirstName().equals("Alyssa")
+                && employee.getManager().getFirstName().equals("Eleni")
+                && employee.getDepartment().getDepartmentName().equals("Sales"))
+                .findFirst().get();
+         */
+
+
     }
 
     // Display all the job histories in ascending order by start date
     public static List<JobHistory> getAllJobHistoriesInAscendingOrder() {
-        //TODO Implement the method
-        return new ArrayList<>();
+
+        return getAllJobHistories().stream()
+                .sorted(Comparator.comparing(JobHistory::getStartDate))
+                .collect(Collectors.toList());
+
     }
 
     // Display all the job histories in descending order by start date
     public static List<JobHistory> getAllJobHistoriesInDescendingOrder() {
-        //TODO Implement the method
-        return new ArrayList<>();
+
+        return getAllJobHistories().stream()
+                .sorted(Comparator.comparing(JobHistory::getStartDate).reversed())
+                .collect(Collectors.toList());
+
+
     }
 
     // Display all the job histories where the start date is after 01.01.2005
     public static List<JobHistory> getAllJobHistoriesStartDateAfterFirstDayOfJanuary2005() {
-        //TODO Implement the method
-        return new ArrayList<>();
+
+        return getAllJobHistories().stream()
+                .filter(jobHistory -> jobHistory.getStartDate().isAfter(LocalDate.of(2005,1,1)))
+                .collect(Collectors.toList());
+
     }
 
     // Display all the job histories where the end date is 31.12.2007 and the job title of job is 'Programmer'
